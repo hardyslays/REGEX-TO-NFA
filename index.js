@@ -271,12 +271,14 @@ const solve_for_nfa = (regex) => {
 
 const regex_to_nfa = (regex) => {
     
+    regex = '(' + regex + ')';
+
     for(let i = 0; i <regex.length-1; i++)
     {
         if(!checkKeyword(regex[i]) && !checkKeyword(regex[i+1]))regex = regex.substring(0, i+1) + '.' + regex.substring(i+1);
     }
-
+    console.log(regex)
     regex = infix_to_postfix(regex);
 
     return solve_for_nfa(regex);
-}
+}   
