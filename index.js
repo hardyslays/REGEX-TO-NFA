@@ -190,7 +190,6 @@ class Enfa{
     }
 }
 
-
 class Stack{
     constructor()
     {
@@ -330,7 +329,6 @@ const Stringify = (arr) => {
     var str = arr.sort().join("");
     return str;
 }
-
 
 var obj1 = regex_to_nfa('');
 var obj2 = new Enfa('b');
