@@ -37,12 +37,13 @@ class Enfa{
     add_transition(from, via, to){
         var arr = this.transition[from];
         if(arr == undefined){
-            arr = {[via] : [to]}
-            this.transition[from] = arr;
+            let temp = { [via] : [to]}
+            this.transition[from] = temp;
         }
         else if(arr[via] == undefined)arr[via] = [to];
-        else arr[via].push(to);
-
+        else if(arr[via].indexOf(to) == -1){
+            arr[via].push(to);
+        }
         if(this.inputs.includes(via) == false) this.inputs.push(via);
         if(this.states.includes(from) == false) this.states.push(from);
         if(this.states.includes(to) == false) this.states.push(to);
@@ -143,10 +144,52 @@ class Enfa{
 
         return result;
     }
+
+    sigma_closure(){
+        var arr = {}
+
+        Object.keys(this.transition).forEach( from =>{
+            if(this.transition[from]['*'] != undefined)
+            {
+                arr[from] = this.transition[from]['*'];
+            }
+            if(arr[from] == undefined)arr[from] = [from];
+            else if(arr[from].indexOf(from) == -1)arr[from].push(from);
+        })
+
+        return arr;
+    }
+
+    rename_state(from, to)
+    {
+        this.states.splice(this.states.indexOf(from), 1);
+        this.states.push(to);
+
+        if(this.intial_state == from)this.intial_state = to;
+
+        if(this.final_states.indexOf(from) != -1)
+        {
+            this.final_states.splice(this.final_states.indexOf(from), 1);
+            this.final_states.push(to);
+        }
+
+        if(this.transition[from] != undefined)
+        {
+            this.transition[to] = this.transition[from];
+            delete this.transition[from];
+        }
+
+        Object.keys(this.transition).forEach(f => {
+            Object.keys(this.transition[f]).forEach(via => {
+                    if(this.transition[f][via].indexOf(from) != -1){
+                        this.transition[f][via].splice(this.transition[f][via].indexOf(from), 1);
+                        this.transition[f][via].push(to);
+                    }
+            });
+        })
+    }
 }
 
-var obj1 = new Enfa('a');
-var obj2 = new Enfa('b');
 
 class Stack{
     constructor()
@@ -281,4 +324,111 @@ const regex_to_nfa = (regex) => {
     regex = infix_to_postfix(regex);
 
     return solve_for_nfa(regex);
-}   
+}
+
+const Stringify = (arr) => {
+    var str = arr.sort().join("");
+    return str;
+}
+
+
+var obj1 = regex_to_nfa('');
+var obj2 = new Enfa('b');
+
+const reachable_states = (nfa, from, via, arr, res) => {
+    if(nfa.transition[from]['*'] != undefined){
+        nfa.transition[from]['*'].forEach( e => {
+            if(arr.indexOf(e) == -1){
+                arr.push(e);
+                let temp = reachable_states(nfa, e, via, arr, res);
+                temp.forEach( el => {
+                    if(res.indexOf(el) == -1)res.push(el);
+                })
+            }
+        })
+    }
+    if(nfa.transition[from] == undefined || nfa.transition[from][via] == undefined)return res;
+
+    nfa.transition[from][via].forEach( e => {
+        if(res.indexOf(e) == -1){
+            res.push(e);
+        }
+    })
+
+    return res;
+}
+
+const nfa_to_dfa = (nfa) => {
+    
+    let symbols = nfa.inputs;
+    if(symbols.indexOf('*') != -1)
+    {
+        symbols.splice(symbols.indexOf('*'), 1);
+    }
+
+    var dfa = new Enfa();
+    
+    var arr = nfa.sigma_closure();
+
+    var tot_array = [Stringify(arr[nfa.intial_state])];
+    var cur_array = [arr[nfa.intial_state]];
+    
+    // Object.keys(arr).forEach( key => {
+    //     if(cur_array.indexOf(arr[key]) == -1){
+    //         cur_array.push(arr[key]);
+    //         tot_array.push(Stringify(arr[key]));
+    //     }
+    // })
+
+    console.log(tot_array);
+    console.log(cur_array);
+    dfa.rename_state('q0', Stringify(arr[nfa.intial_state]));
+
+    while(cur_array.length)
+    {
+        let from = cur_array[0];
+        console.log(Stringify(from));
+        symbols.forEach( via => {
+            let to = [];
+            from.forEach( f => {
+                if(nfa.transition[f] != undefined)
+                {
+                    let out = reachable_states(nfa, f, via, [], []);
+                    out.forEach( o=> {
+                        let reach = reachable_states(nfa, o, sigma, [], []);
+
+                        reach.forEach( el => {
+                            if(to.indexOf(el) == -1)to.push(el);
+                        })
+                    })
+                }
+            })
+            console.log('\t',via, ':');
+            console.log('\t',to);
+            if(Stringify(to) != '' && tot_array.indexOf(Stringify(to)) == -1){
+                tot_array.push(Stringify(to));
+                cur_array.push(to);
+            }
+
+
+            if(to.length > 0)dfa.add_transition(Stringify(from), via, Stringify(to));
+        })
+        cur_array.splice(0, 1);
+    }
+
+    nfa.final_states.forEach( f =>{
+        tot_array.forEach( el => {
+            if(el.search(f) != -1){
+                if(dfa.final_states.indexOf(el) == -1){
+                    dfa.final_states.push(el);
+                }
+            }
+        })
+    })
+
+    return dfa;
+}
+
+//Conversion from E-nfa to dfa compeleted
+//Testing of conversion from E-nfa to dfa remains
+//Renaming states in dfa remaining
