@@ -334,7 +334,7 @@ var obj1 = regex_to_nfa('');
 var obj2 = new Enfa('b');
 
 const reachable_states = (nfa, from, via, arr, res) => {
-    if(nfa.transition[from]['*'] != undefined){
+    if(nfa.transition[from] != undefined && nfa.transition[from]['*'] != undefined){
         nfa.transition[from]['*'].forEach( e => {
             if(arr.indexOf(e) == -1){
                 arr.push(e);
@@ -356,6 +356,30 @@ const reachable_states = (nfa, from, via, arr, res) => {
     return res;
 }
 
+const rename_states = (dfa, state, arr)=> {
+
+    if(arr.indexOf(state) == -1){
+        let str = 'q' + arr.length/2;
+        console.log(state, ":", str);
+        dfa.rename_state(state, str);
+        arr.push(state);
+        arr.push(str);
+        state = str;
+    }
+
+    dfa.inputs.forEach( via => {
+        if(dfa.transition[state] != undefined && dfa.transition[state][via] != undefined){
+            dfa.transition[state][via].forEach( to => {
+                if(arr.indexOf(to) == -1){
+                    dfa = rename_states(dfa, to, arr);
+                }
+            })
+        }
+    })
+
+    return dfa;
+}
+
 const nfa_to_dfa = (nfa) => {
     
     let symbols = nfa.inputs;
@@ -370,16 +394,7 @@ const nfa_to_dfa = (nfa) => {
 
     var tot_array = [Stringify(arr[nfa.intial_state])];
     var cur_array = [arr[nfa.intial_state]];
-    
-    // Object.keys(arr).forEach( key => {
-    //     if(cur_array.indexOf(arr[key]) == -1){
-    //         cur_array.push(arr[key]);
-    //         tot_array.push(Stringify(arr[key]));
-    //     }
-    // })
 
-    console.log(tot_array);
-    console.log(cur_array);
     dfa.rename_state('q0', Stringify(arr[nfa.intial_state]));
 
     while(cur_array.length)
@@ -392,9 +407,12 @@ const nfa_to_dfa = (nfa) => {
                 if(nfa.transition[f] != undefined)
                 {
                     let out = reachable_states(nfa, f, via, [], []);
+                    // console.log(f, ':', via);
+                    // console.log(out);
                     out.forEach( o=> {
-                        let reach = reachable_states(nfa, o, sigma, [], []);
 
+                        let reach = reachable_states(nfa, o, sigma, [], []);
+                        reach.push(o);
                         reach.forEach( el => {
                             if(to.indexOf(el) == -1)to.push(el);
                         })
@@ -424,9 +442,14 @@ const nfa_to_dfa = (nfa) => {
         })
     })
 
+    dfa = rename_states(dfa, dfa.intial_state, []);
+
     return dfa;
 }
 
-//Conversion from E-nfa to dfa compeleted
-//Testing of conversion from E-nfa to dfa remains
-//Renaming states in dfa remaining
+//Conversion from E-nfa to dfa --- compeleted
+//Testing of conversion from E-nfa to dfa remains --- done
+//Renaming states in dfa remaining --- renaming done
+
+//Adding comments to coe for better readability
+//Resulting DFA is actually an NFA, so to think about that
