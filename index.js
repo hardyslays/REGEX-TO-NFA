@@ -1,6 +1,6 @@
 import Enfa from '/Enfa.js';
 import Stack from '/Stack.js';
-import {checkKeyword, infix_to_postfix, Stringify, rename_states, reachable_states} from './Utils.js';
+import {checkKeyword, infix_to_postfix, Stringify, rename_states, reachable_states, modify_regex} from './Utils.js';
 
 var sigma = '*';
 
@@ -60,13 +60,9 @@ const solve_for_nfa = (regex) => {
 }
 
 const regex_to_nfa = (regex) => {
-    
-    regex = '(' + regex + ')';
 
-    for(let i = 0; i <regex.length-1; i++)
-    {
-        if(!checkKeyword(regex[i]) && !checkKeyword(regex[i+1]))regex = regex.substring(0, i+1) + '.' + regex.substring(i+1);
-    }
+    regex = modify_regex(regex);
+    
     regex = infix_to_postfix(regex);
 
     return solve_for_nfa(regex);
@@ -128,9 +124,9 @@ const nfa_to_dfa = (nfa) => {
             }
         })
     })
-
+    
     dfa = rename_states(dfa, dfa.intial_state, []);
-
+    
     return dfa;
 }
 
@@ -140,9 +136,22 @@ console.log(obj1)
 console.log(obj2)
 console.log("hello")
 
-// Conversion from E-nfa to dfa --- compeleted
-//Testing of conversion from E-nfa to dfa remains --- done
-//Renaming states in dfa remaining --- renaming done
 
-//Adding comments to coe for better readability
-//Resulting DFA is actually an NFA, so to think about that
+document.querySelector('#convert').addEventListener('click', () => {
+    var regex = document.querySelector("#regex-input").value;
+
+    regex = modify_regex(regex);
+    document.querySelector("#mod_regex").textContent = regex;
+
+    var nfa = regex_to_nfa(regex);
+    if(nfa == -1)alert("NFA not possible for given Regular expression. Please check the regular expression you have entered.");
+
+    else{
+        // output_nfa(nfa);
+        dfa = nfa_to_dfa(nfa);
+        // output_dfa(dfa);
+
+        document.querySelector("#nfa").style.display = "block";
+        document.querySelector("#dfa").style.display = "block";
+    }
+})

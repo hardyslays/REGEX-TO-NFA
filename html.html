@@ -37,9 +37,10 @@
         </div class="inp">
             <label for="regex-input">Enter your regex here:</label><br>
             <input type="text" name="regex-input" id="regex-input" placeholder="(a|b)*">
+            <button id="convert">PROCESS THE REGEX</button>
         </div>
 
-        <div class="nfa">
+        <div id="nfa">
             <h2>CONVERSION FROM REGEX TO NFA</h2>
             <h3>Modified regex:</h3>
             <p id="mod_regex">Nothing here</p>
@@ -71,7 +72,7 @@
             </table>
         </div>
 
-        <div class="dfa">
+        <div id="dfa">
             <h2>CONVERSION FROM NFA TO DFA</h2>
             
             <h3>States:</h3>

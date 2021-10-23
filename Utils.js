@@ -91,3 +91,13 @@ export const reachable_states = (nfa, from, via, arr, res) => {
 
     return res;
 }
+export const modify_regex = (regex) => {
+    regex = '(' + regex + ')';
+
+    for(let i = 0; i <regex.length-1; i++)
+    {
+        if(!checkKeyword(regex[i]) && !checkKeyword(regex[i+1]))regex = regex.substring(0, i+1) + '.' + regex.substring(i+1);
+    }
+
+    return regex;
+}
