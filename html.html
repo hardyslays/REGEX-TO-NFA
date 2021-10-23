@@ -8,6 +8,103 @@
     <title>Document</title>
 </head>
 <body style="background-color: rgb(61, 61, 61);">
+
+<div class="root">
+    
+    <nav></nav>
+    <div class="main">
+        
+        <h2>This web application converts a given regular expression into respective NFA and DFA</h2>
+        
+        <div class="container">
+            <h3 class="intro">INFORMATION ON SYNTAX OF REGULAR EXPRESSION</h3>
+            <div class="intro-body">
+                <p>The syntax of regular expression should use these rules:</p>
+                <ul>
+                    <li>Regular expression uses symbols { ".", "*", "(", ")", "|", "+" } as keywords to define itself.</li>
+                    <li>To concatenate two regex R1 and R2: R1.R2</li>
+                    <li>To make choice between regex R1 or R2: R1|R2</li>
+                    <li>For Klene closure: R*</li>
+                    <li>For Klene plus closure: R+</li>
+                    <li>Brackets are used to give a part of expression priority over other parts.</li>
+                    <li>Example of good regex: (a|b)*, (a.b.c)+, (0)*.1.(0)*</li>
+                    <li>Example of bad regex: a++, (*)+, (a|b|)*</li>
+                    <li>Note: The web app is not designed to reject bad regex, so it may cause unexpected results.</li>
+                </ul>
+            </div>
+        </div>
+
+        </div class="inp">
+            <label for="regex-input">Enter your regex here:</label><br>
+            <input type="text" name="regex-input" id="regex-input" placeholder="(a|b)*">
+        </div>
+
+        <div class="nfa">
+            <h2>CONVERSION FROM REGEX TO NFA</h2>
+            <h3>Modified regex:</h3>
+            <p id="mod_regex">Nothing here</p>
+
+            <h3>States:</h3>
+            <p>array of states</p>
+
+            <h3>Symbols used:</h3>
+            <p>array of symbols</p>
+
+            <h3>Input state:</h3>
+            <p>input state</p>
+
+            <h3>Final states:</h3>
+            <p>Array of final states</p>
+
+            <h3>Transition table for NFA:</h3>
+            <table>
+                <tr>
+                    <th>STATES</th>
+                    <th>INPUT</th>
+                    <th>OUTPUT STATE</th>
+                </tr>
+                <tr>
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dfa">
+            <h2>CONVERSION FROM NFA TO DFA</h2>
+            
+            <h3>States:</h3>
+            <p>array of states</p>
+
+            <h3>Symbols used:</h3>
+            <p>array of symbols</p>
+
+            <h3>Input state:</h3>
+            <p>input state</p>
+
+            <h3>Final states:</h3>
+            <p>Array of final states</p>
+
+            <h3>Transition table for DFA:</h3>
+            <table>
+                <tr>
+                    <th>STATES</th>
+                    <th>INPUT</th>
+                    <th>OUTPUT STATE</th>
+                </tr>
+                <tr>
+                    <td>null</td>
+                    <td>null</td>
+                    <td>null</td>
+                </tr>
+            </table>
+        
+        </div>
+
+    </div>
+</div>
+
     <script src="index.js" type="module"></script>
 </body>
 </html>

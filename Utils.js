@@ -69,7 +69,6 @@ export const rename_states = (dfa, state, arr)=> {
     return dfa;
 }
 
-
 export const reachable_states = (nfa, from, via, arr, res) => {
     if(nfa.transition[from] != undefined && nfa.transition[from]['*'] != undefined){
         nfa.transition[from]['*'].forEach( e => {
