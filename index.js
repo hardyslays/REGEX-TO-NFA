@@ -130,6 +130,114 @@ const nfa_to_dfa = (nfa) => {
     return dfa;
 }
 
+const print_nfa = (nfa) => {
+
+    console.log(nfa);
+
+    var states_arr = nfa.states.toString();
+    document.querySelector("#nfa_states").innerHTML = states_arr;
+
+    states_arr = nfa.inputs.toString();
+    document.querySelector("#nfa_inputs").innerHTML = states_arr;
+
+    states_arr = nfa.intial_state;
+    document.querySelector("#nfa_initial_state").innerHTML = states_arr;
+
+    states_arr = nfa.final_states.toString();
+    document.querySelector("#nfa_final_states").innerHTML = states_arr;
+
+    var transition_table = document.querySelector("#nfa_transitions");
+    var thead = document.createElement('thead');
+    states_arr = document.createElement('th');
+    states_arr.innerHTML = 'STATES';
+    thead.appendChild(states_arr);
+    
+    let inp = document.createElement('th');
+    inp.innerHTML = sigma;
+    thead.appendChild(inp);
+    
+    nfa.inputs.forEach( e => {
+        inp = document.createElement('th');
+        inp.innerHTML = e;
+        thead.appendChild(inp);
+    })
+
+    transition_table.appendChild(thead);
+
+    nfa.states.forEach( from => {
+        var row = document.createElement("tr");
+        states_arr = document.createElement("td");
+        
+        states_arr.innerHTML = from;
+        row.appendChild(states_arr);
+
+        states_arr = document.createElement("td");
+        if(nfa.transition[from] == undefined || nfa.transition[from][sigma] == undefined)states_arr.innerHTML = '-----';
+        else states_arr.innerHTML = nfa.transition[from][sigma];
+
+        row.appendChild(states_arr);
+        
+        nfa.inputs.forEach( via => {
+            states_arr = document.createElement("td");
+            if(nfa.transition[from] == undefined || nfa.transition[from][via] == undefined)states_arr.innerHTML = '-----';
+            else states_arr.innerHTML = nfa.transition[from][via];
+
+            row.appendChild(states_arr);
+        })
+
+        transition_table.appendChild(row);
+    })
+}
+
+const print_dfa = (dfa) => {
+
+    console.log(dfa);
+
+    var states_arr = dfa.states.toString();
+    document.querySelector("#dfa_states").innerHTML = states_arr;
+
+    states_arr = dfa.inputs.toString();
+    document.querySelector("#dfa_inputs").innerHTML = states_arr;
+
+    states_arr = dfa.intial_state;
+    document.querySelector("#dfa_initial_state").innerHTML = states_arr;
+
+    states_arr = dfa.final_states.toString();
+    document.querySelector("#dfa_final_states").innerHTML = states_arr;
+
+    var transition_table = document.querySelector("#dfa_transitions");
+    var thead = document.createElement('thead');
+    states_arr = document.createElement('th');
+    states_arr.innerHTML = 'STATES';
+    thead.appendChild(states_arr);
+
+    dfa.inputs.forEach( e => {
+        let inp = document.createElement('th');
+        inp.innerHTML = e;
+        thead.appendChild(inp);
+    })
+
+    transition_table.appendChild(thead);
+
+    dfa.states.forEach( from => {
+        var row = document.createElement("tr");
+        states_arr = document.createElement("td");
+        
+        states_arr.innerHTML = from;
+        row.appendChild(states_arr);
+        
+        dfa.inputs.forEach( via => {
+            states_arr = document.createElement("td");
+            if(dfa.transition[from] == undefined || dfa.transition[from][via] == undefined)states_arr.innerHTML = '-----';
+            else states_arr.innerHTML = dfa.transition[from][via];
+
+            row.appendChild(states_arr);
+        })
+
+        transition_table.appendChild(row);
+    })
+}
+
 var obj1 = regex_to_nfa('AA|AAA');
 var obj2 = nfa_to_dfa(obj1)
 console.log(obj1)
@@ -148,9 +256,10 @@ document.querySelector('#convert').addEventListener('click', () => {
 
     else{
         // output_nfa(nfa);
+        print_nfa(nfa);
         dfa = nfa_to_dfa(nfa);
+        print_dfa(dfa);
         // output_dfa(dfa);
-
         document.querySelector("#nfa").style.display = "block";
         document.querySelector("#dfa").style.display = "block";
     }
