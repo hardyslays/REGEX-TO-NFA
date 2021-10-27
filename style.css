@@ -1,0 +1,138 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Zen Old Mincho', serif;
+
+    text-align: center;
+    font-size: 30px;
+
+}
+body{
+    background-color: #5CDB94;
+}
+nav{
+    height: 4rem;
+}
+
+nav>h1{
+    line-height: 4rem;
+    font-size: 70px;
+    font-weight: bolder;
+    
+    color: #EDF5E0;
+    background-color: #05396B;
+}
+.main{
+    background-color: #5CDB94;
+}
+.main>h2{
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.main>.container{
+    width: 50vw;
+    display: flex;
+    margin-left : auto;
+    margin-right: auto;
+    flex-direction: column;
+    align-items: center;
+    /* margin-bottom: 1rem; */
+}
+
+.container>.intro-body>h2{
+    border-bottom: double 3px black;
+    padding: .2rem;
+    margin-bottom: .3rem;
+}
+
+.intro-body>ul{
+    padding: .3rem;
+}
+.intro-body>ul>li{
+    font-size: .6rem;
+    text-align: left;
+    padding-bottom: .2rem;
+    margin-left: 1rem;
+}
+
+label{
+    display: inline-block;
+    width: 100vw;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    background-color: #2dc56f;
+}
+input{
+    width: 85vw;
+    padding: 0.2rem;
+    font-size: .8rem;
+    background-color: #EDF5E0;
+    border-radius: 1rem;
+}
+.inp-inp{
+    background-color: #2dc56f;
+}
+button{
+    color: #EDF5E0;
+    background-color: #05396B;
+}
+
+#nfa, #dfa{
+    background-color: #2dc56f;
+    text-align: left;
+    border: solid 1px black;
+    padding-left: 2rem;
+}
+
+#nfa>h2, #dfa>h2{
+    display: inline-block;
+    text-align: left;
+    text-decoration: underline;
+    text-decoration-style: double;
+    width: 100vw;
+    font-size: 1.2rem;
+}
+#nfa>h3, #dfa>h3{
+    display: inline-block;
+    font-size: .8rem;
+    color: rgb(32, 32, 32);
+}
+#nfa>p, #dfa>p{
+    display: inline-block;
+    font-size: .8rem;
+    color: rgb(32, 32, 32);
+}
+table{ 
+    border-spacing: 1; 
+    border-collapse: collapse; 
+    background: #EDF5E0;
+    border-radius:.2rem;
+    overflow:hidden;
+    max-width:1500px; 
+    width:70vw;
+    margin:0 auto;
+    position:relative;
+}
+thead{ 
+    height:60px;
+    background-color: #05396B;
+    color: #EDF5E0;
+}
+tbody,tr{ 
+    height:45px; 
+    border-bottom:1px solid #EDF5E0;
+}
+td,th{
+    text-align:left;
+    padding-left:8px;
+}
+th{
+    font-size: 1.2rem;
+}
+th:hover{
+    background-color: #052544;
+}
+td:hover{
+    background-color: #bbbbba;
+}

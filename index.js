@@ -134,6 +134,8 @@ const print_nfa = (nfa) => {
 
     console.log(nfa);
 
+    document.querySelector("#nfa_transitions").innerHTML = "";
+
     var states_arr = nfa.states.toString();
     document.querySelector("#nfa_states").innerHTML = states_arr;
 
@@ -152,12 +154,8 @@ const print_nfa = (nfa) => {
     states_arr.innerHTML = 'STATES';
     thead.appendChild(states_arr);
     
-    let inp = document.createElement('th');
-    inp.innerHTML = sigma;
-    thead.appendChild(inp);
-    
     nfa.inputs.forEach( e => {
-        inp = document.createElement('th');
+        var inp = document.createElement('th');
         inp.innerHTML = e;
         thead.appendChild(inp);
     })
@@ -170,10 +168,6 @@ const print_nfa = (nfa) => {
         
         states_arr.innerHTML = from;
         row.appendChild(states_arr);
-
-        states_arr = document.createElement("td");
-        if(nfa.transition[from] == undefined || nfa.transition[from][sigma] == undefined)states_arr.innerHTML = '-----';
-        else states_arr.innerHTML = nfa.transition[from][sigma];
 
         row.appendChild(states_arr);
         
@@ -192,6 +186,8 @@ const print_nfa = (nfa) => {
 const print_dfa = (dfa) => {
 
     console.log(dfa);
+
+    document.querySelector("#dfa_transitions").innerHTML = "";
 
     var states_arr = dfa.states.toString();
     document.querySelector("#dfa_states").innerHTML = states_arr;
@@ -246,6 +242,9 @@ console.log("hello")
 
 
 document.querySelector('#convert').addEventListener('click', () => {
+    document.querySelector("#nfa").style.display = "none";
+    document.querySelector("#dfa").style.display = "none";
+
     var regex = document.querySelector("#regex-input").value;
 
     regex = modify_regex(regex);
@@ -264,3 +263,12 @@ document.querySelector('#convert').addEventListener('click', () => {
         document.querySelector("#dfa").style.display = "block";
     }
 })
+
+
+
+//CHECK NFA TO DFA CONVERSION FOR: a.a.a
+//ADD DEAD STATES IN DFA
+//RENAMING STATES ISN'T WORKING.....PROBABLY DUE TO ERROR IN CONVERSION FROM NFA TO DFA
+//ERROR IN CONVERTING '.' OR CONCATENATION FROM NFA TO DFA
+
+//CLOSE NFA AND DFA DISPLAY BY DEFAULT IN CSS
