@@ -135,6 +135,7 @@ const nfa_to_dfa = nfa => {
     })
     
     dfa = rename_states(dfa, dfa.intial_state, []);
+    dfa.add_dead_state();
     
     return dfa;
 }

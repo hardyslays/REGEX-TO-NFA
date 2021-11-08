@@ -187,4 +187,25 @@ export default class Enfa{
             });
         })
     }
+
+    add_dead_state(){
+        var ok = false;
+
+        this.inputs.forEach( via => {
+            this.states.forEach(from => {
+                if(this.transition[from] == undefined || this.transition[from][via] == undefined){
+                    this.add_transition(from, via, "dead");
+                    ok = true;
+                }
+            })
+        })
+
+        if(ok){
+            this.inputs.forEach( via => {
+                this.add_transition("dead", via, "dead");
+            })
+
+            this.rename_state("dead", `q${this.states.length-1}`);
+        }
+    }
 }
