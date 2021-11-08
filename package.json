@@ -1,0 +1,21 @@
+{
+  "name": "regex-to-nfa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "open-cli http://localhost:5050/html.html && node server.js",
+    "node": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "open-cli": "^7.0.1"
+  }
+}

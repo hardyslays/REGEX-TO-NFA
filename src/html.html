@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@900&display=swap" rel="stylesheet"> 
+</head>
+
+<body>
+
+    <div class="root">
+        <nav>
+            <h1>REGEX ➡ NFA ➡ DFA</h1>
+        </nav>
+        <div class="main">
+            
+            <h2>This web application converts a given regular expression into respective NFA and DFA</h2>
+            
+            <div class="container">
+                <div class="intro-body">
+                    <h2>The syntax of regular expression should use these rules:</h2>
+                    <ul>
+                        <li>Regular expression uses symbols { ".", "*", "(", ")", "|", "+" } as keywords to define itself.</li>
+                        <li>To concatenate two regex R1 and R2: &nbsp;&nbsp;&nbsp; R1 . R2</li>
+                        <li>To make choice between regex R1 or R2: &nbsp;&nbsp;&nbsp; R1 | R2</li>
+                        <li>For Klene closure: &nbsp;&nbsp;&nbsp; R*</li>
+                        <li>For Klene plus closure: &nbsp;&nbsp;&nbsp; R+</li>
+                        <li>Brackets are used to give a part of expression priority over other parts.</li>
+                        <li>Example of good regex: &nbsp;&nbsp;&nbsp; (a|b)*, (a.b.c)+, (0)*.1.(0)*, a*.b</li>
+                        <li>Example of bad regex: &nbsp;&nbsp;&nbsp; a++, (*)+, (a|b|)*, a*b</li>
+                        <li>Note: The web app is not designed to specifically reject bad regex, so it may cause unexpected results for them.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="inp">
+                <label for="regex-input">Enter your regex here:</label><br>
+                <div class="inp-inp">
+                    <input type="text" name="regex-input" id="regex-input" placeholder="(a|b)*">
+                    <button id="convert"> GO 🔎 </button>
+                </div>
+            </div>
+
+            <div id="nfa">
+                <h2>CONVERSION FROM REGEX TO NFA</h2>
+                <h3>Modified regex:</h3>
+                <p id="mod_regex">Nothing here</p>
+                
+                <br>
+                
+                <h3>States:</h3>
+                <p id="nfa_states">array of states</p>
+                
+                <br>
+                
+                <h3>Symbols used:</h3>
+                <p id="nfa_inputs">array of symbols</p>
+                
+                <br>
+                
+                <h3>Input state:</h3>
+                <p id="nfa_initial_state">input state</p>
+                
+                <br>
+                
+                <h3>Final states:</h3>
+                <p id="nfa_final_states">Array of final states</p>
+                
+                <br>
+                
+                <h3>Transition table for NFA:</h3>
+                <br>
+                <table id="nfa_transitions">
+                    <thead>
+                        <th>STATES</th>
+                        <th>A</th>
+                        <th>B</th>
+                    </thead>
+                    <tr>
+                        <td>q0</td>
+                        <td>q1, q2</td>
+                        <td>q2</td>
+                    </tr>
+                    <tr>
+                        <td>q1</td>
+                        <td>q2</td>
+                        <td>q2,q4,q5</td>
+                    </tr>
+
+                    <tr>
+                        <td>q2</td>
+                        <td>q2.q3,q5</td>
+                        <td>q2</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="dfa">
+                <h2>CONVERSION FROM NFA TO DFA</h2>
+                
+                <h3>States:</h3>
+                <p id="dfa_states">array of states</p>
+
+                <br>
+                
+                <h3>Symbols used:</h3>
+                <p id="dfa_inputs">array of symbols</p>
+                
+                <br>
+                
+                <h3>Input state:</h3>
+                <p id="dfa_initial_state">input state</p>
+                
+                <br>
+                
+                <h3>Final states:</h3>
+                <p id="dfa_final_states">Array of final states</p>
+                
+                <br>
+                
+                <h3>Transition table for DFA:</h3>
+                
+                <br>
+                
+                <table id="dfa_transitions">
+                </table>
+            
+            </div>
+    </div>
+
+    <script src="index.js" type="module"></script>
+</body>
+</html>
