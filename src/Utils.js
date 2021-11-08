@@ -1,6 +1,11 @@
+//Importing stack class
 import Stack from './Stack.js';
-const sigma = '*'
 
+//Define sigma with '*' character
+const sigma = '*';
+
+
+// Function to calculate precedence of keywords in Regex
 const prec = (ch) =>{
     if(ch == '*' || ch == '+')return 4;
     if(ch == '.')return 3;
@@ -8,12 +13,16 @@ const prec = (ch) =>{
     return 1;
 }
 
+
+// Check if current character of Regex is a keyword
 export const checkKeyword = (ch) => {
     if(ch == '(' || ch == ')' || ch == '*' || ch == '+' || ch == '.' || ch == '|')return true;
 
     return false;
 }
 
+
+// Convert infix reex to postfix regex
 export const infix_to_postfix = (regex) =>{
     var st = new Stack();
     var out = '';
@@ -42,11 +51,15 @@ export const infix_to_postfix = (regex) =>{
     return out;
 }
 
-export const Stringify = (arr) => {
+
+// To convert a "set of states" to a string, used to denote and compare "set of states" with each other
+export const Stringify = arr => {
     var str = arr.sort().join("");
     return str;
 }
 
+
+// Function to rename complex states into normal states  
 export const rename_states = (dfa, state, arr)=> {
 
     if(arr.indexOf(state) == -1){
@@ -70,6 +83,8 @@ export const rename_states = (dfa, state, arr)=> {
     return dfa;
 }
 
+
+// Function to get reachable states from one state via given input
 export const reachable_states = (nfa, from, via, arr, res) => {
     if(nfa.transition[from] != undefined && nfa.transition[from]['*'] != undefined){
         nfa.transition[from]['*'].forEach( e => {
@@ -94,6 +109,9 @@ export const reachable_states = (nfa, from, via, arr, res) => {
 
     return res;
 }
+
+
+// Modify regex for irregularities (the modification doesn't check for all irregularities)
 export const modify_regex = regex => {
     regex = '(' + regex + ')';
 

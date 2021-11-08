@@ -1,8 +1,12 @@
-
+// Define sigma with '*'
 var sigma = '*';
 
+
+
+// Class template for Enfa
 export default class Enfa{
 
+    // Constructor for a single character input(also covers no input giving default NFA with one initial state and no final state)
     constructor(input)
     {
         if(input === undefined){
@@ -25,6 +29,7 @@ export default class Enfa{
         }
     }
 
+    // Util function for dev purposes
     show_transition(){
         Object.keys(this.transition).forEach(key => {
             console.log(key, ":");
@@ -35,6 +40,7 @@ export default class Enfa{
         }) 
     }
 
+    // Function to add a new transition having "FROM state", via input, "TO state" parameters
     add_transition(from, via, to){
         if(this.transition[from] === undefined){
             var temp = { [via] : [to]}
@@ -49,11 +55,13 @@ export default class Enfa{
         if(this.states.includes(to) == false) this.states.push(to);
     }
 
+    // Util function for dev purposes
     get_transition(from, via)
     {
         return this.transition[from][via];
     }
 
+    // Applying Klene_plus on current E-NFA
     klene_plus(){
         this.final_states.forEach(f => {
             this.add_transition(f, sigma, this.intial_state);
@@ -61,6 +69,8 @@ export default class Enfa{
 
         return this;
     }
+
+    // Applying Klene_closure on current E-NFA
     klene_closure(){
         this.klene_plus();
         this.final_states.forEach( s=> {
@@ -70,7 +80,7 @@ export default class Enfa{
         return this;
     }
 
-    
+    // Util function for dev purposes
     get_state_val_with_offset(state, offset)
     {
         var ans = (parseInt(state.substring(1)) + offset);
@@ -78,6 +88,7 @@ export default class Enfa{
         return state;
     }
 
+    // Function to apply concatenation of two NFAs 
     concat(obj){
         var offset = this.states.length;
 
@@ -103,6 +114,7 @@ export default class Enfa{
         return this;
     }
 
+    // Function to apply or operation between two NFAs i.e. result = NFA(1) | NFA(2)
     addition(obj){
         var offset = this.states.length+1;
         var result = new Enfa();
@@ -145,6 +157,8 @@ export default class Enfa{
         return result;
     }
 
+
+    // Function to get sigma_closure of given NFA
     sigma_closure(){
         var arr = {}
 
@@ -160,6 +174,7 @@ export default class Enfa{
         return arr;
     }
 
+    // Function to rename a state of NFA
     rename_state(from, to)
     {
         this.states.splice(this.states.indexOf(from), 1);
@@ -188,6 +203,7 @@ export default class Enfa{
         })
     }
 
+    // Function to add dead state (Function to be used for DFA)
     add_dead_state(){
         var ok = false;
 

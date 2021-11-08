@@ -1,3 +1,4 @@
+// Class template to utilize Stack data structure
 export default class Stack{
     constructor()
     {

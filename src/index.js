@@ -1,11 +1,41 @@
+//Import Enfa class form Enfa.js module
 import Enfa from '/Enfa.js';
+//Import Stack class from Stack.js module
 import Stack from '/Stack.js';
+//Import important utils from Utils.js module
 import {checkKeyword, infix_to_postfix, Stringify, rename_states, reachable_states, modify_regex} from './Utils.js';
 
+//We will define sigma with '*' character
 var sigma = '*';
 
-const solve_for_nfa = (regex) => {
+
+
+//Conversion of Postfix Regular expression to Nfa
+const solve_for_nfa = regex => {
+    //Create a new stack to hold parts of NFAs
     var st = new Stack();
+
+    //Traverse in Postfix regular expression and convert it into NFA
+
+    //      Steps for conversion is:
+    // ************************************
+    // ************************************
+    // 1. If you get a character, create a NFA for the single character and push the NFA to the stack.
+    // 2. If you get a keyword (any one from * | . +):
+    //  2.a. If the keyword is '*':
+    //      2.a.i.  if the stack is empty, return failed conversion(-1)
+    //      2.a.ii. else pop the top from stack, apply Klene closure and push back to stack
+    //  2.b. If the keyword is '+':
+    //      2.b.i.  if the stack is empty, return failed conversion(-1)
+    //      2.b.ii. else pop the top from stack, apply Klene plus and push back to stack
+    //  2.c. If keyword is '.':
+    //      2.c.i   if the stack has less than 2 elements, return failed conversion(-1)
+    //      2.c.ii. else pop two elements apply concatenation and push the result in stack.
+    //  2.d. If keyword is '|':
+    //      2.d.i   if the stack has less than 2 elements, return failed conversion(-1)
+    //      2.e.ii. else pop two elements apply NFA(1)|NFA(2) and push the result in stack.
+    // 3. Check the stack, if it contains exactly 1 element, return it as result, else failed conversion.
+    // ************************************
 
     for(let i = 0; i < regex.length; i++)
     {
@@ -59,21 +89,47 @@ const solve_for_nfa = (regex) => {
     return res;
 }
 
-const regex_to_nfa = (regex) => {
 
+
+//Create a wrapper function for  conversion from REGEX to NFA
+const regex_to_nfa = regex => {
+
+    //Modify regex for irregularities(it doesn't completely check for irregularities as it is out of scope of this project)
     regex = modify_regex(regex);
     
+    //Convert the Infix regular expression to postfix regular expression
     regex = infix_to_postfix(regex);
 
+    // Solve postfix regex to get resultant NFA
     return solve_for_nfa(regex);
 }
 
+
+
+//Conversion of NFA to DFA
+
+//      Steps for conversion:
+// ************************************
+// ************************************
+// 1. Copy the symbols(Terminals) of NFA to DFA
+// 2. Create a DFA using NFA class(we will manually manage the difference between NFA and DFA)
+// 3. Get the sigma closure of NFA in an array "arr"
+// 4. Create two arrays, totArray: to hold array of "Stringified set of states", curArray: to hold array of "set of states" not processed for further branches
+// 5. Add initial "Set of states" to curArray and its Stringified version to totArray
+// 6. Rename the initial state of DFA to Initial "Stringified Set of states" of NFA
+// 7. While curArray is not empty:
+//      7.a. Take first element of curArray and name it as "from".
+//      7.b. For each of the input symbol (except sigma) of the NFA:
+//          7.b.i.  For each of the state in "Set of states" of FROM:
+//              7.b.i.(i)   Get all of the reachable state from the given state via given input, and create a "set of states".
+//              7.b.i.(ii)  If the resultant "set of states" is not included in totArray, add it in totArray and curArray.
+//              7.b.i.(iii) If the resultant "set of states" is not empty, add a transition in DFA from "FROM set of states" via given symbols to "TO set of states".
+//              7.b.i.(iv)  Remove the "FROM set of states" from curArray, as it is now processed.
+// 8. Rename the complex states of DFA to simpler states
+// 9. Add dead state to DFA, if required
+// ************************************
 const nfa_to_dfa = nfa => { 
 
-    console.log("**********************************************************")
-    console.log("**********************************************************")
-    console.log("**********************************************************")
-    
     let symbols = nfa.inputs;
     if(symbols.indexOf('*') != -1)
     {
@@ -107,15 +163,13 @@ const nfa_to_dfa = nfa => {
                             if(to.indexOf(el) == -1)to.push(el);
                         })
                     })
-                    console.log(out);
-                    console.log(reach);
                 }
             })
+
             if(Stringify(to) != '' && tot_array.indexOf(Stringify(to)) == -1){
                 tot_array.push(Stringify(to));
                 cur_array.push(to);
             }
-            
             
             if(to.length > 0){
                 dfa.add_transition(Stringify(from), via, Stringify(to));
@@ -135,11 +189,14 @@ const nfa_to_dfa = nfa => {
     })
     
     dfa = rename_states(dfa, dfa.intial_state, []);
-    // dfa.add_dead_state();
+    dfa.add_dead_state();
     
     return dfa;
 }
 
+
+
+//Function to print resultant NFA in html body
 const print_nfa = nfa => {
 
     console.log(nfa);
@@ -193,6 +250,9 @@ const print_nfa = nfa => {
     })
 }
 
+
+
+//Function to print resultant NFA in html body
 const print_dfa = dfa => {
 
     console.log(dfa);
@@ -245,6 +305,8 @@ const print_dfa = dfa => {
 }
 
 
+
+// Event listener for onClick event of submit button, which converts given regex to NFA then to DFA and then prints both NFA anf DFA to the HTML body
 document.querySelector('#convert').addEventListener('click', () => {
     document.querySelector("#nfa").style.display = "none";
     document.querySelector("#dfa").style.display = "none";
@@ -258,21 +320,10 @@ document.querySelector('#convert').addEventListener('click', () => {
     if(nfa == -1)alert("NFA not possible for given Regular expression. Please check the regular expression you have entered.");
 
     else{
-        // output_nfa(nfa);
         print_nfa(nfa);
         dfa = nfa_to_dfa(nfa);
         print_dfa(dfa);
-        // output_dfa(dfa);
         document.querySelector("#nfa").style.display = "block";
         document.querySelector("#dfa").style.display = "block";
     }
 })
-
-
-
-//CHECK NFA TO DFA CONVERSION FOR: a.a.a
-//ADD DEAD STATES IN DFA
-//RENAMING STATES ISN'T WORKING.....PROBABLY DUE TO ERROR IN CONVERSION FROM NFA TO DFA
-//ERROR IN CONVERTING '.' OR CONCATENATION FROM NFA TO DFA
-
-//CLOSE NFA AND DFA DISPLAY BY DEFAULT IN CSS
