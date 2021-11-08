@@ -1,4 +1,5 @@
 import Stack from './Stack.js';
+const sigma = '*'
 
 const prec = (ch) =>{
     if(ch == '*' || ch == '+')return 4;
@@ -81,6 +82,7 @@ export const reachable_states = (nfa, from, via, arr, res) => {
             }
         })
     }
+
     if(nfa.transition[from] == undefined || nfa.transition[from][via] == undefined)return res;
 
     nfa.transition[from][via].forEach( e => {
@@ -89,9 +91,10 @@ export const reachable_states = (nfa, from, via, arr, res) => {
         }
     })
 
+
     return res;
 }
-export const modify_regex = (regex) => {
+export const modify_regex = regex => {
     regex = '(' + regex + ')';
 
     for(let i = 0; i <regex.length-1; i++)

@@ -36,14 +36,13 @@ export default class Enfa{
     }
 
     add_transition(from, via, to){
-        var arr = this.transition[from];
-        if(arr == undefined){
-            let temp = { [via] : [to]}
+        if(this.transition[from] === undefined){
+            var temp = { [via] : [to]}
             this.transition[from] = temp;
         }
-        else if(arr[via] == undefined)arr[via] = [to];
-        else if(arr[via].indexOf(to) == -1){
-            arr[via].push(to);
+        else if(this.transition[from][via] == undefined)this.transition[from][via] = [to];
+        else if(this.transition[from][via].indexOf(to) == -1){
+            this.transition[from][via].push(to);
         }
         if(this.inputs.includes(via) == false) this.inputs.push(via);
         if(this.states.includes(from) == false) this.states.push(from);
@@ -176,8 +175,7 @@ export default class Enfa{
 
         if(this.transition[from] != undefined)
         {
-            this.transition[to] = this.transition[from];
-            delete this.transition[from];
+            this.transition[to] = Object.assign({}, this.transition[from]);
         }
 
         Object.keys(this.transition).forEach(f => {

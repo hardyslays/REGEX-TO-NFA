@@ -68,7 +68,11 @@ const regex_to_nfa = (regex) => {
     return solve_for_nfa(regex);
 }
 
-const nfa_to_dfa = (nfa) => {
+const nfa_to_dfa = nfa => { 
+
+    console.log("**********************************************************")
+    console.log("**********************************************************")
+    console.log("**********************************************************")
     
     let symbols = nfa.inputs;
     if(symbols.indexOf('*') != -1)
@@ -94,23 +98,28 @@ const nfa_to_dfa = (nfa) => {
                 if(nfa.transition[f] != undefined)
                 {
                     let out = reachable_states(nfa, f, via, [], []);
+                    let reach;
+                    console.log(f, ">", via);
                     out.forEach( o=> {
-
-                        let reach = reachable_states(nfa, o, sigma, [], []);
+                        reach = reachable_states(nfa, o, sigma, [], []);
                         reach.push(o);
                         reach.forEach( el => {
                             if(to.indexOf(el) == -1)to.push(el);
                         })
                     })
+                    console.log(out);
+                    console.log(reach);
                 }
             })
             if(Stringify(to) != '' && tot_array.indexOf(Stringify(to)) == -1){
                 tot_array.push(Stringify(to));
                 cur_array.push(to);
             }
-
-
-            if(to.length > 0)dfa.add_transition(Stringify(from), via, Stringify(to));
+            
+            
+            if(to.length > 0){
+                dfa.add_transition(Stringify(from), via, Stringify(to));
+            }
         })
         cur_array.splice(0, 1);
     }
@@ -130,7 +139,7 @@ const nfa_to_dfa = (nfa) => {
     return dfa;
 }
 
-const print_nfa = (nfa) => {
+const print_nfa = nfa => {
 
     console.log(nfa);
 
@@ -183,7 +192,7 @@ const print_nfa = (nfa) => {
     })
 }
 
-const print_dfa = (dfa) => {
+const print_dfa = dfa => {
 
     console.log(dfa);
 
@@ -234,11 +243,11 @@ const print_dfa = (dfa) => {
     })
 }
 
-var obj1 = regex_to_nfa('AA|AAA');
-var obj2 = nfa_to_dfa(obj1)
-console.log(obj1)
-console.log(obj2)
-console.log("hello")
+// var obj1 = regex_to_nfa('AA|AAA');
+// var obj2 = nfa_to_dfa(obj1)
+// console.log(obj1)
+// console.log(obj2)
+// console.log("hello")
 
 
 document.querySelector('#convert').addEventListener('click', () => {

@@ -58,10 +58,10 @@ nav>h1{
 
 label{
     display: inline-block;
-    width: 100vw;
+    width: 95vw;
     font-size: 1.2rem;
     padding: 0.5rem;
-    background-color: #2dc56f;
+    /* background-color: #2dc56f; */
 }
 input{
     width: 85vw;
@@ -74,15 +74,31 @@ input{
     background-color: #2dc56f;
 }
 button{
+    padding: .3rem;
+    padding-left: .6rem;
+    padding-right: .6rem;
+    border-radius: 1rem;
     color: #EDF5E0;
     background-color: #05396B;
 }
 
+button:hover{ 
+    transition: 150ms;
+    background-color: #16437E;
+    color: #ffffff;
+}
+
+button:active {
+    background: #09223b;
+    color: rgb(255, 255, 255, .7);
+}
+
 #nfa, #dfa{
+    display: none;
     background-color: #2dc56f;
     text-align: left;
-    border: solid 1px black;
     padding-left: 2rem;
+    padding-bottom: 2rem;
 }
 
 #nfa>h2, #dfa>h2{
