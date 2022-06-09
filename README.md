@@ -21,7 +21,7 @@ Now, the steps to convert Regex to NFA is:
 4. After the traversal, if we have only one NFA in our stack, it means that our conversion is successful and that NFA is our resultant NFA.
 
 ## NFA to DFA
-The conversion from NFA to DFA is done using the classical sigma closure method, so I will not be explaining that here. You can probably read it on some good sites such as GeeksForGeeeks or JavaTpoint, which will provide better description than me 	:sweat_smile:	:sweat_smile:.
+The conversion from NFA to DFA is done using the classical sigma closure method, so I will not be explaining that here. You can probably read it on some good sites such as GeeksForGeeeks or JavaTpoint, which will provide better description than me 	:sweat_smile::sweat_smile:.
 Both the NFA and DFA are represented in the table format on the website with no visual graph, because well, I am using vanilla JS :') .
 
 ## Prologue
